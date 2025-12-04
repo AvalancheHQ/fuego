@@ -20,8 +20,16 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version-file: "./go.work"
+
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install custom codspeed-go-runner
+        run: cargo install --git https://github.com/CodSpeedHQ/codspeed-go --branch main
+
       - name: Run the benchmarks
         uses: CodSpeedHQ/action@v4
+        env:
+          CODSPEED_LOG: debug
+          CODSPEED_GO_PKG_VERSION: main
         with:
           mode: walltime
           run: go test -bench=.
